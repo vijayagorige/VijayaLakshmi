@@ -1,0 +1,173 @@
+package gameProject;
+import java.util.Scanner;
+class EmptyOceanMap
+{
+	//instance variables
+	  int i,j,x,y,k;
+	  String grid[][]=new String[10][10];
+	  public static int pCount=5,cCount=5;
+	  Scanner sc=new Scanner(System.in);	  
+     //creating empty ocean 
+	 public  void printEmptyOcean()
+	 {
+		 System.out.print("   0123456789");
+		 System.out.println();
+		 for(int i=0;i<grid.length;i++)
+	     {
+	        	System.out.print(i+" |");
+	            for(int j=0;j<grid[i].length;j++)
+	            {
+	            	if(grid[i][j]==null)
+	            	{
+	            		grid[i][j]=" ";
+	            		System.out.print(grid[i][j]);
+	            	}
+	            	else
+	            	{
+	            		System.out.print(grid[i][j]);
+	            	}
+	            }
+	            System.out.println("| "+i);
+	      }
+		 System.out.print("   0123456789");
+		 System.out.println();
+	 }
+     //deploying players ship 
+	 public void playerShips()
+	 {
+		 int k;
+		 System.out.println("Deploy your ships");
+		 for(k=1;k<=5;k++)
+		 {
+			 System.out.print("enter x co-ordinate for your "+k+". ship: ");
+			 x=sc.nextInt();
+			 System.out.print("enter y co-ordinate for your "+k+". ship: ");
+			 y=sc.nextInt();
+			 grid[x][y]="@";
+		 }
+		 printEmptyOcean();
+	 }	 
+     //deploying computers ship
+	 public void computersShip()
+	 {
+		 System.out.println("Computer is deploying ships");
+		 int k;
+		 for(k=1;k<=5;k++)
+		 {
+			x=(int)(Math.random()*10);
+			y=(int)(Math.random()*10);
+			
+			if((x>=0&&x<10) && (y>=0&&y<10) && grid[x][y]==" ")
+			{
+				grid[x][y]="x";
+			}
+			else if((x>=0&&x<10) && (y>=0&&y<10) && grid[x][y]=="@")
+			{
+				System.out.println("You cannot place two or more ships on the same location");
+			}
+			System.out.println(k+"."+" ship DEPLOYED");
+		 }
+		 printEmptyOcean();
+	 }
+	 //players turn
+	 public void playersTurn()
+	 {
+		 System.out.println("YOUR TURN");
+		 System.out.print("enter x co-ordinate: ");
+		 x=sc.nextInt();
+		 System.out.print("enter y co-ordinate: ");
+		 y=sc.nextInt();
+		 if((x<0&&x>10)&&(y<0&&y<10))
+		 {
+			 System.out.println("You can't place outside the ocean");
+		 }
+		 else if(grid[x][y]=="x")
+		 {
+			 System.out.println("BOOM! You sunk the ship!");
+			 grid[x][y]="!";
+			 pCount++;
+			 cCount--;
+		 }
+		 else if(grid[x][y]=="@")
+		 {
+			 System.out.println("Oh no, you sunk your own ship :(");
+			 grid[x][y]="x";
+			 pCount--;
+		 }
+		 else if(grid[x][y]==" ")
+		 {
+			 System.out.println("You missed");
+			 grid[x][y]="-";
+		 }
+		 printEmptyOcean();
+		 System.out.println("Your ships: "+pCount+" | "+"Computer ships: "+cCount);
+	 }
+	 //computers turn :computer take the random numbers
+	 public void computersTurn()
+	 {
+		 System.out.println("COMPUTER'S TURN");
+		 x=(int)(Math.random()*10);
+		 y=(int)(Math.random()*10);
+		 if((x<0&&x>10) && (y<0&&y<10))
+		 {
+			 System.out.println("You can't place outside the ocean");
+		 }
+		 else if(grid[x][y]=="@")
+		 {
+			 System.out.println("The Computer sunk one of your ships!");
+			 grid[x][y]="x";
+			 pCount--;
+			 cCount++;
+		 }
+		 else if(grid[x][y]=="x")
+		 {
+			 System.out.println("The Computer sunk one of its own ships");
+			 grid[x][y]="!";
+			 cCount--;
+		 }
+		 else if(grid[x][y]==" ")
+		 {
+			 System.out.println("Computer missed"); 
+		 }
+		 printEmptyOcean();
+		 System.out.println("Your ships: "+pCount+" | "+"Computer ships: "+cCount);
+	 }
+	 //player and computer turns are repeated until any of them ship is 0
+	 public void playGame()
+	 {
+		 do
+		 {
+			 playersTurn();
+			 computersTurn();
+		 }while(pCount!=0 && cCount!=0);
+	 }
+	 //who's is the winner
+	 public void gameOver()
+	 {
+		 if(pCount==0)
+		 {
+			 System.out.println("computer won");
+		 }
+		 else
+		 {
+			 System.out.println("Horray! you win the battle :)");
+		 }
+	 }  
+}
+public class BattleShip 
+{	
+	public static void main(String[] args) 
+	{
+		System.out.println("**** Welcome to the world of Battle Ships game ****");
+		System.out.println("Right now the ship is empty.");
+		EmptyOceanMap ocean=new EmptyOceanMap();
+		ocean.printEmptyOcean();
+		ocean.playerShips();	
+		ocean.computersShip();
+		ocean.playersTurn();
+		ocean.computersTurn();
+		ocean.playGame();
+		ocean.gameOver();
+    }
+}
+		        
